@@ -34,7 +34,10 @@ jobs:
         run: ./gradlew clean build -x test
 
       - name: Set artifact name
-        run: echo "artifact=$(ls ./build/libs/*.jar | xargs -n 1 basename)" >> $GITHUB_ENV
+        run: |
+            ARTIFACT=$(ls ./build/libs/*.jar | xargs -n 1 basename)
+            ARTIFACT_CLEANED=$(echo "$ARTIFACT" | tr -d '\r\n')
+            echo "artifact=$ARTIFACT_CLEANED" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
