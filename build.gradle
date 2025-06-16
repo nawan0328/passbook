@@ -6,7 +6,6 @@ plugins {
 
 group = 'kr.4soong'
 version = '0.0.1-SNAPSHOT'
-rootProject.name = 'passbook'
 
 java {
 	toolchain {
