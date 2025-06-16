@@ -58,8 +58,9 @@ jobs:
         env:
           NAS_USERNAME: ${{ secrets.NAS_USERNAME }}
           NAS_HOST: ${{ secrets.NAS_HOST }}
+          NAS_PORT: ${{ secrets.NAS_PORT }}
         run: |
-          ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST << EOF
+          ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p $NAS_PORT<< EOF
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
             docker stop passbook || true
