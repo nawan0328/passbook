@@ -56,11 +56,17 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Deploy to NAS (via SSH)
+        env:
+          NAS_USERNAME: ${{ secrets.NAS_USERNAME }}
+          NAS_PASSWORD: ${{ secrets.NAS_PASSWORD }}
+          NAS_HOST: ${{ secrets.NAS_HOST }}
+          DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
         run: |
-         sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_HOST }} -p${{ secrets.NAS_PORT }} << 'EOF'
-            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-            docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
-            docker stop passbook || true
-            docker rm passbook || true
-            docker run -d --name passbook -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/passbook:latest
-         EOF
+          sshpass -p "$NAS_PASSWORD" ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p2200 <<EOF
+docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+docker pull $DOCKER_USERNAME/passbook:latest
+docker stop passbook || true
+docker rm passbook || true
+docker run -d --name passbook -p 8080:8080 $DOCKER_USERNAME/passbook:latest
+EOF
