@@ -35,9 +35,9 @@ jobs:
 
       - name: Set artifact name
         run: |
-            ARTIFACT=$(ls ./build/libs/*.jar | xargs -n 1 basename)
-            ARTIFACT_CLEANED=$(echo "$ARTIFACT" | tr -d '\r\n')
-            echo "artifact=$ARTIFACT_CLEANED" >> $GITHUB_ENV
+          ARTIFACT=$(ls ./build/libs/*.jar | xargs -n 1 basename)
+          ARTIFACT_CLEANED=$(echo "$ARTIFACT" | tr -d '\r\n')
+          echo "artifact=$ARTIFACT_CLEANED" >> $GITHUB_ENV
 
       - name: Build Docker image
         run: |
@@ -54,16 +54,17 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-- name: Deploy to NAS (via SSH)
-  env:
-    NAS_USERNAME: ${{ secrets.NAS_USERNAME }}
-    NAS_PASSWORD: ${{ secrets.NAS_PASSWORD }}
-    NAS_HOST: ${{ secrets.NAS_HOST }}
-  run: |
-    sshpass -p "$NAS_PASSWORD" ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p2200 << 'EOF'
-    docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-    docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
-    docker stop passbook || true
-    docker rm passbook || true
-    docker run -d --name passbook -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/passbook:latest
+      - name: Deploy to NAS (via SSH)
+        env:
+          NAS_USERNAME: ${{ secrets.NAS_USERNAME }}
+          NAS_PASSWORD: ${{ secrets.NAS_PASSWORD }}
+          NAS_HOST: ${{ secrets.NAS_HOST }}
+        run: |
+          sshpass -p "$NAS_PASSWORD" ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p2200 << 'EOF'
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
+          docker stop passbook || true
+          docker rm passbook || true
+          docker run -d --name passbook -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/passbook:latest
 EOF
+
