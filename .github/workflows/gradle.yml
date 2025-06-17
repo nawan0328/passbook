@@ -61,9 +61,9 @@ jobs:
           NAS_PASSWORD: ${{ secrets.NAS_PASSWORD }}
           NAS_HOST: ${{ secrets.NAS_HOST }}
         run: |
-         ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p2200 << 'EOF'
+         ssh -o StrictHostKeyChecking=no ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_HOST }} -p${{ secrets.NAS_PORT }} $ << 'EOF'
             echo "연결 성공! NAS에 파일 복사 중..."
-            echo @$NAS_HOST
+            echo ${{ secrets.NAS_HOST }}
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
             docker stop passbook || true
