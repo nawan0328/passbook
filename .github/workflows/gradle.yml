@@ -68,6 +68,6 @@ jobs:
             docker pull $DOCKER_USERNAME/passbook:latest
             docker stop passbook || true
             docker rm passbook || true
-            docker run -d --name passbook -p 8080:8080 $DOCKER_USERNAME/passbook:latest
+            docker run -d --name passbook -p 9090:8080 $DOCKER_USERNAME/passbook:latest
           EOF
 
