@@ -60,11 +60,10 @@ jobs:
           NAS_PASSWORD: ${{ secrets.NAS_PASSWORD }}
           NAS_HOST: ${{ secrets.NAS_HOST }}
         run: |
-          sshpass -p "$NAS_PASSWORD" ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p2200 << 'EOF'
-docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
-docker stop passbook || true
-docker rm passbook || true
-docker run -d --name passbook -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/passbook:latest
+         sshpass -p "$NAS_PASSWORD" ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p2200<< EOF
+            docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+            docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
+            docker stop passbook || true
+            docker rm passbook || true
+            docker run -d --name passbook -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/passbook:latest
 EOF
-
