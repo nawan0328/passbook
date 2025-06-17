@@ -68,4 +68,4 @@ jobs:
             docker stop passbook || true
             docker rm passbook || true
             docker run -d --name passbook -p 8080:8080 ${{ secrets.DOCKER_USERNAME }}/passbook:latest
-EOF
+            EOF
