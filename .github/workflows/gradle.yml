@@ -57,6 +57,7 @@ jobs:
 
       - name: Deploy to NAS (via SSH)
         run: |
+         set -x
          sshpass -p "${{ secrets.NAS_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.NAS_USERNAME }}@${{ secrets.NAS_HOST }} -p${{ secrets.NAS_PORT }} $ << 'EOF'
             docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
             docker pull ${{ secrets.DOCKER_USERNAME }}/passbook:latest
