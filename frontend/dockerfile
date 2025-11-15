@@ -1,0 +1,22 @@
+# Node로 Vue 앱 빌드
+FROM node:20-alpine as build
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install
+
+COPY ./src ./src
+COPY ./public ./public
+
+RUN npm run build
+
+# Nginx로 정적 파일 서비스
+FROM nginx:alpine
+
+COPY --from=build /app/dist /usr/share/nginx/html
+
+# 기본 포트
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]

@@ -15,6 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # ----------------- Backend Build -----------------
       - name: Set up JDK 24
         uses: actions/setup-java@v4
         with:
@@ -34,22 +35,24 @@ jobs:
       - name: Build JAR
         run: ./gradlew clean build -x test
 
-      - name: Set artifact name
+      - name: Build Backend Docker image
         run: |
-          ARTIFACT=$(ls ./build/libs/*.jar | xargs -n 1 basename)
-          ARTIFACT_CLEANED=$(echo "$ARTIFACT" | tr -d '\r\n')
-          echo "artifact=$ARTIFACT_CLEANED" >> $GITHUB_ENV
+          docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/passbook-backend:latest .
 
-      - name: Build Docker image
+      # ----------------- Frontend Build -----------------
+      - name: Build Frontend Docker image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/passbook:latest .
+          docker build -f frontend/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/passbook-frontend:latest ./frontend
 
       - name: Log in to Docker Hub
         run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
 
-      - name: Push Docker image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/passbook:latest
+      - name: Push Docker images
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/passbook-backend:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/passbook-frontend:latest
 
+      # ----------------- Deploy to NAS -----------------
       - name: Set up SSH connection
         uses: webfactory/ssh-agent@v0.5.3
         with:
@@ -65,9 +68,16 @@ jobs:
         run: |
           sshpass -p "$NAS_PASSWORD" ssh -o StrictHostKeyChecking=no $NAS_USERNAME@$NAS_HOST -p2200 <<EOF
             docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-            docker pull $DOCKER_USERNAME/passbook:latest
-            docker stop passbook || true
-            docker rm passbook || true
-            docker run -d --name passbook -p 9090:8080 $DOCKER_USERNAME/passbook:latest
-          EOF
 
+            # Backend
+            docker pull $DOCKER_USERNAME/passbook-backend:latest
+            docker stop passbook-backend || true
+            docker rm passbook-backend || true
+            docker run -d --name passbook-backend -p 9090:8080 $DOCKER_USERNAME/passbook-backend:latest
+
+            # Frontend
+            docker pull $DOCKER_USERNAME/passbook-frontend:latest
+            docker stop passbook-frontend || true
+            docker rm passbook-frontend || true
+            docker run -d --name passbook-frontend -p 9091:80 $DOCKER_USERNAME/passbook-frontend:latest
+          EOF
