@@ -40,6 +40,10 @@ jobs:
           docker build -f Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/passbook-backend:latest .
 
       # ----------------- Frontend Build -----------------
+      - name: Create frontend .env.prd from secrets
+        run: |
+          echo "VITE_API_BASE=${{ secrets.VITE_API_BASE }}" > frontend/.env.production
+          
       - name: Build Frontend Docker image
         run: |
           docker build -f frontend/Dockerfile -t ${{ secrets.DOCKER_USERNAME }}/passbook-frontend:latest ./frontend
@@ -78,6 +82,6 @@ jobs:
             # Frontend
             docker pull $DOCKER_USERNAME/passbook-frontend:latest
             docker stop passbook-frontend || true
-            docker rm passbook-frontend || true
+            Wdocker rm passbook-frontend || true
             docker run -d --name passbook-frontend -p 9091:80 $DOCKER_USERNAME/passbook-frontend:latest
           EOF
