@@ -1,12 +1,12 @@
 # 1. Node 환경에서 Vue 앱 빌드
-FROM node:20 as build
+FROM node:20-alpine as build
 
 # 작업 디렉토리 설정
 WORKDIR /app
 
 # 의존성 설치
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # 프로젝트 전체 복사
 COPY . .
