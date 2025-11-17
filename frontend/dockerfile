@@ -1,23 +1,27 @@
-# Node로 Vue 앱 빌드
-FROM node:20-alpine as build
+# 1. Node 환경에서 Vue 앱 빌드
+FROM node:20 as build
 
+# 작업 디렉토리 설정
 WORKDIR /app
 
+# 의존성 설치
 COPY package*.json ./
-RUN npm install
+RUN npm ci
 
-COPY index.html ./
-COPY ./src ./src
-COPY ./public ./public
+# 프로젝트 전체 복사
+COPY . .
 
+# 빌드
 RUN npm run build
 
-# Nginx로 정적 파일 서비스
+# 2. Nginx 환경으로 정적 파일 배포
 FROM nginx:alpine
 
+# 빌드 결과물 복사
 COPY --from=build /app/dist /usr/share/nginx/html
 
 # 기본 포트
 EXPOSE 80
 
+# Nginx 데몬 포그라운드 실행
 CMD ["nginx", "-g", "daemon off;"]
