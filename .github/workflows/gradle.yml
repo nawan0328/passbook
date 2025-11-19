@@ -42,7 +42,7 @@ jobs:
       # ----------------- Frontend Build -----------------
       - name: Create frontend .env.prd from secrets
         run: |
-          echo "VITE_API_BASE=${{ secrets.VITE_API_BASE }}" > frontend/.env.production
+          echo "VITE_API_BASE_URL=${{ secrets.VITE_API_BASE }}" > frontend/.env.production
           
       - name: Build Frontend Docker image
         run: |
