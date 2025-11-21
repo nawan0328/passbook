@@ -202,10 +202,11 @@ body {
 
 #app {
   max-width: 100%;
+  padding: 10px !important;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 600px;
   margin: 0 auto;
 }
 
@@ -213,7 +214,7 @@ body {
   width: 80px;      /* 아이콘 크기 */
   height: 80px;
   vertical-align: middle; /* 글자와 수평 정렬 */
-  margin-right: 4px;       /* 글자와 간격 */
+  margin-right: 1px;       /* 글자와 간격 */
 }
 
 h1 {
@@ -414,7 +415,7 @@ label {
   font-size: 18px;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 640px) {
   h1 {
     font-size: 2rem;
   }
