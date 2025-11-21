@@ -1,7 +1,10 @@
 <template>
   <div id="app">
     <div class="container">
-      <h1>📱 바코드 생성기</h1>
+		<h1>
+		  <img src="/favicon.png" alt="icon" class="title-icon" />
+		  바코드 생성기
+		</h1>
       <p class="subtitle">C128 바코드를 생성하고 다운로드하세요</p>
       
       <div class="card">
@@ -192,7 +195,7 @@ export default {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: radial-gradient(circle at bottom right, #d8c7ff 0%, #ffffff 60%);
+  background: radial-gradient(circle at bottom right, #3cb371 0%, #ffffff 30%);
   min-height: 100vh;
   padding: 20px;
 }
@@ -202,19 +205,26 @@ body {
 }
 
 .container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
+.title-icon {
+  width: 80px;      /* 아이콘 크기 */
+  height: 80px;
+  vertical-align: middle; /* 글자와 수평 정렬 */
+  margin-right: 4px;       /* 글자와 간격 */
+}
+
 h1 {
-  color: white;
+  color: black;
   text-align: center;
   margin-bottom: 10px;
   font-size: 2.5rem;
 }
 
 .subtitle {
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(0, 0, 0, 0.9);
   text-align: center;
   margin-bottom: 30px;
   font-size: 1.1rem;
@@ -404,7 +414,7 @@ label {
   font-size: 18px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 800px) {
   h1 {
     font-size: 2rem;
   }
