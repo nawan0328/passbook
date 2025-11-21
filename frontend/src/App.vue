@@ -192,7 +192,7 @@ export default {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(circle at bottom right, #d8c7ff 0%, #ffffff 60%);
   min-height: 100vh;
   padding: 20px;
 }
