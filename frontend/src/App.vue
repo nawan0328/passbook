@@ -1,3 +1,9 @@
+<script setup>
+import { ref } from 'vue'
+
+const selected = ref('')
+</script>
+
 <template>
   <div id="app">
     <div class="container">
@@ -9,6 +15,13 @@
       
       <div class="card">
         <div class="form-group">
+          <label for="membershipSelected">선택됨: {{ selected }}</label>
+          <select v-model="selected" class="input" required>
+            <option value="" disabled selected hidden>하나를 선택하세요</option>
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+          </select>
           <label for="barcodeNumber">바코드 번호</label>
           <input
             type="text"
@@ -413,6 +426,10 @@ label {
   color: #667eea;
   font-weight: bold;
   font-size: 18px;
+}
+
+select.input:invalid {
+  color: #999;
 }
 
 @media (max-width: 640px) {
